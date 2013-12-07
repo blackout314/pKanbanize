@@ -6,7 +6,6 @@
  */
 class pKanbanizeApi
 {
-
 	/**
 	 * @var pKanbanizeApi
 	 */
@@ -443,23 +442,37 @@ class pKanbanizeApi
 	 * @param {string} fromdate
 	 * @param {string} todate
 	 * @param {int} [page] default 1
-	 * @param {int} [resultperpage] default 30
+	 * @param {int} [resultsperpage] default 30
 	 * @param {string} [author] default ALL
 	 * @param {string} [eventtype] Transitions, Updates, Comments, Blocks. Default is ALL
 	 * @param {string} [textformat] "plain" (default) and "html". If the plain text format is used, the HTML tags are stripped from the history details
 	 *
 	 * @return {Array} all activities 
+	 * - allactivities : The number of all activities for the corresponding time window specified by the fromdate and todate parameters.
+	 * - page : current page
+	 * - activities[] : author, event, text, date, taskid
 	 */
-	public function getBoardActivities( $boardid, $fromdate, $todate) 
+	public function getBoardActivities( $boardid, $fromdate, $todate, $page=1, $resultsperpage=30, $author=null, $eventtype=null, $textformat='plain') 
 	{
 		$call = new pKanbanizeApiCall();
 
 		$call->setFunction('get_board_activities');
-		$call->setData(array('boardid' => $boardid));
-		$call->setData(array('fromdate' => $fromdate));
-		$call->setData(array('todate' => $todate));
+		$call->setData( array(
+			'boardid' => $boardid, 
+			'fromdate' => $fromdate, 
+			'todate' => $todate,
+			'page' => $page,
+			'resultsperpage' => $resultsperpage,
+			'author' => $author,
+			'eventtype' => $eventtype,
+			'textformat' => $textformat
+		) );
 
 		return $this->doCall($call);
 	}
 
 }
+// -- class end
+
+// -- eof
+?>
