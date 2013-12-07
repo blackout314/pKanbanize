@@ -1,7 +1,7 @@
 <?php
 
 
-class EtuDev_KanbanizePHP_APICall
+class pKanbanizeApiCall
 {
 
     /**
@@ -52,7 +52,7 @@ class EtuDev_KanbanizePHP_APICall
     /**
      * @param array $data
      *
-     * @return EtuDev_KanbanizePHP_APICall
+     * @return pKanbanizeApiCall
      */
     public function setData($data)
     {
@@ -71,7 +71,7 @@ class EtuDev_KanbanizePHP_APICall
     /**
      * @param array $headers
      *
-     * @return EtuDev_KanbanizePHP_APICall
+     * @return pKanbanizeApiCall
      */
     public function setHeaders($headers)
     {
@@ -90,7 +90,7 @@ class EtuDev_KanbanizePHP_APICall
     /**
      * @param null|string $request_error
      *
-     * @return EtuDev_KanbanizePHP_APICall
+     * @return pKanbanizeApiCall
      */
     public function setRequestError($request_error)
     {
@@ -109,7 +109,7 @@ class EtuDev_KanbanizePHP_APICall
     /**
      * @param null|string $response
      *
-     * @return EtuDev_KanbanizePHP_APICall
+     * @return pKanbanizeApiCall
      */
     public function setResponse($response)
     {
@@ -128,7 +128,7 @@ class EtuDev_KanbanizePHP_APICall
     /**
      * @param int $response_code
      *
-     * @return EtuDev_KanbanizePHP_APICall
+     * @return pKanbanizeApiCall
      */
     public function setResponseCode($response_code)
     {
@@ -147,7 +147,7 @@ class EtuDev_KanbanizePHP_APICall
     /**
      * @param string $function
      *
-     * @return EtuDev_KanbanizePHP_APICall
+     * @return pKanbanizeApiCall
      */
     public function setFunction($function)
     {
@@ -166,7 +166,7 @@ class EtuDev_KanbanizePHP_APICall
     /**
      * @param string $format
      *
-     * @return EtuDev_KanbanizePHP_APICall
+     * @return pKanbanizeApiCall
      */
     protected function setFormat($format)
     {
@@ -183,7 +183,7 @@ class EtuDev_KanbanizePHP_APICall
     }
 
     /**
-     * @return EtuDev_KanbanizePHP_APICall
+     * @return pKanbanizeApiCall
      */
     public function setFormatJSON()
     {
@@ -191,7 +191,7 @@ class EtuDev_KanbanizePHP_APICall
     }
 
     /**
-     * @return EtuDev_KanbanizePHP_APICall
+     * @return pKanbanizeApiCall
      */
     public function setFormatXML()
     {

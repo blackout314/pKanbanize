@@ -1,16 +1,23 @@
 <?php
 
-define( KANBANIZE_API_KEY, 'API' );
+// define some const
+//
+define( KANBANIZE_API_KEY, 'YOUR-API-KEY' );
 define( USERNAME, 'username' );
 define( PASSWORD, 'password' );
 
+// include libs
+//
 include 'API.php';
 include 'APICall.php';
 
-EtuDev_KanbanizePHP_API::getInstance()->setApiKey( KANBANIZE_API_KEY );
-EtuDev_KanbanizePHP_API::getInstance()->login( USERNAME, PASSWORD );
+// login to api
+//
+pKanbanizeApi::getInstance()->setApiKey( KANBANIZE_API_KEY );
+pKanbanizeApi::getInstance()->login( USERNAME, PASSWORD );
 
-//echo print_r( EtuDev_KanbanizePHP_API::getInstance()->getBoardSettings( 6 ) );
-echo print_r( EtuDev_KanbanizePHP_API::getInstance()->getAllTasks( 6 ) );
+// retrieve info
+//
+echo print_r( pKanbanizeApi::getInstance()->getAllTasks( $TASK ) );
 
 ?>
