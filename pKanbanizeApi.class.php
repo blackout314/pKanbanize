@@ -10,12 +10,14 @@ class pKanbanizeApi
 	 * @var string YOUR API CALL
 	 */
 	protected $api_key;
+	protected $email;
+	protected $password;
 
 	protected $base_kanbanize_url = 'kanbanize.com/index.php/api/kanbanize';
 
 	protected $kanbanize_url;
 
-	function __construct($user, $password, $domain = '') {
+	function __construct($email, $password, $domain = '') {
 
 		if ($domain != '') {
 			$domain = $domain . '.';
@@ -23,8 +25,8 @@ class pKanbanizeApi
 
 		$this->kanbanize_url = 'http://'.$domain.$this->base_kanbanize_url;
 
-		print $this->kanbanize_url;
-
+		$this->email = $email;
+		$this->password = $password;
 	}
 
 	/**
@@ -41,6 +43,12 @@ class pKanbanizeApi
 
 	protected function executeCall(pKanbanizeApiCall $call)
 	{
+		
+		if ($call->function != 'login' && empty($this->apy_key)) {
+			$l = $this->login();
+			$this->setApiKey($l['apikey']);
+		}
+
 		$api_key = $this->api_key;
 
 		$function = $call->function;
@@ -98,8 +106,6 @@ class pKanbanizeApi
 	 * @name login
 	 * @desc login method. Limit 30/hour
 	 *
-	 * @param string $email
-	 * @param string $pass
 	 *
 	 * @return array
 	 * with data:
@@ -110,11 +116,11 @@ class pKanbanizeApi
 	 * - timezone    Your time zone
 	 * - apykey      Your API key.
 	 */
-	public function login($email, $pass)
+	protected function login()
 	{
 		$call = new pKanbanizeApiCall();
 		$call->setFunction('login');
-		$call->setData(array('email' => $email, 'pass' => $pass));
+		$call->setData(array('email' => $this->email, 'pass' => $this->password));
 
 		return $this->doCall($call);
 	}
