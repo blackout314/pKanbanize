@@ -21,3 +21,7 @@ https://yourcompany.kanbanize.com/
 $kanbanize = new pKanbanizeApi('email', 'password', 'yourcompany');
 
 ```
+##TEAM
+
+[ ![Carlo Denaro avatar](http://www.carlodenaro.com/me.jpg) Carlo Denaro ](https://github.com/blackout314)
+[ ![Carlo Panzi avatar](https://avatars1.githubusercontent.com/u/51404?s=100) Carlo Panzi ](https://github.com/kajyr)
