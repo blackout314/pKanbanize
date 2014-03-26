@@ -2,7 +2,7 @@
 
 include 'pKanbanizeApi.class.php';
 
-$kanbanize = new pKanbanizeApi('email', 'password', 'yoox');
+$kanbanize = new pKanbanizeApi('email', 'password');
 
 
 
