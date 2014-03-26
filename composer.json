@@ -1,0 +1,7 @@
+{
+    "name": "pKanbanize",
+    "description": "A nice class to call kanbanize API from PHP",
+    "require": {
+        "php": ">=5.3.0"
+    }
+}
