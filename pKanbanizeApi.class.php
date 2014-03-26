@@ -1,5 +1,5 @@
 <?php
-
+include_once 'pKanbanizeApiCall.class.php';
 /**
  * @name pKanbanizeApi
  * @desc connect to kanbanize api
@@ -7,27 +7,25 @@
 class pKanbanizeApi
 {
 	/**
-	 * @var pKanbanizeApi
-	 */
-	static protected $instance;
-
-	/**
-	 * @return pKanbanizeApi
-	 */
-	static public function getInstance()
-	{
-		if (!static::$instance) {
-			static::$instance = new static();
-		}
-		return static::$instance;
-	}
-
-	/**
 	 * @var string YOUR API CALL
 	 */
 	protected $api_key;
 
-	protected $kanbanize_url = 'http://kanbanize.com/index.php/api/kanbanize';
+	protected $base_kanbanize_url = 'kanbanize.com/index.php/api/kanbanize';
+
+	protected $kanbanize_url;
+
+	function __construct($user, $password, $domain = '') {
+
+		if ($domain != '') {
+			$domain = $domain . '.';
+		}
+
+		$this->kanbanize_url = 'http://'.$domain.$this->base_kanbanize_url;
+
+		print $this->kanbanize_url;
+
+	}
 
 	/**
 	 * @name setApiKey
@@ -466,7 +464,7 @@ class pKanbanizeApi
 			'author' => $author,
 			'eventtype' => $eventtype,
 			'textformat' => $textformat
-		) );
+			) );
 
 		return $this->doCall($call);
 	}

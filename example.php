@@ -1,23 +1,24 @@
 <?php
 
-// define some const
-//
-define( KANBANIZE_API_KEY, 'YOUR-API-KEY' );
-define( USERNAME, 'username' );
-define( PASSWORD, 'password' );
+include 'pKanbanizeApi.class.php';
 
-// include libs
-//
-include 'API.php';
-include 'APICall.php';
+$kanbanize = new pKanbanizeApi('user', 'password', 'domain'); // sarebbe meglio il nome della classe maiuscolo
 
+
+$login = $kanbanize->login('user', 'password');
+
+$tasks = $kanbanize->getAllTasks(229);
+
+echo '<pre>';
+print_r($login);
+echo '</pre>';
 // login to api
 //
-pKanbanizeApi::getInstance()->setApiKey( KANBANIZE_API_KEY );
-pKanbanizeApi::getInstance()->login( USERNAME, PASSWORD );
+//pKanbanizeApi::getInstance()->setApiKey( KANBANIZE_API_KEY );
+//pKanbanizeApi::getInstance()->login( USERNAME, PASSWORD );
 
 // retrieve info
 //
-echo print_r( pKanbanizeApi::getInstance()->getAllTasks( $TASK ) );
+//echo print_r( pKanbanizeApi::getInstance()->getAllTasks( $TASK ) );
 
 ?>
