@@ -1,5 +1,5 @@
 # pKanbanize
-A nice class to call [kanbanize](http://kanbanize.com ) API from PHP
+A nice class to call [kanbanize](http://kanbanize.com ) API from PHP - [original code](https://github.com/eturino/KanbanizePHP) (dead project)
 
 
 ##Basic usage:
