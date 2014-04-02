@@ -12,29 +12,32 @@ namespace Api;
 class pkanbanize {
     private $_function;
     private $_data;
+    private $_format;
     
     protected $_url;
     protected $_key;
 
-    public function __construct ($url, $key) {
+    public function __construct ($url, $key, $format='json') {
         $this->_url = $url;
         $this->_key = $key;
+        $this->_format = $format;
     }
     public function data ($data) {
         $this->_data = $data;
     }
     public function call ($function) {
-
+        $headers = array(); // #TODO
+        
         $url = $this->_url;
         $url .= "/$function";
 
-        if ($format) {
-            $url .= "/format/$format";
+        if ($this->_format) {
+            $url .= "/format/".$this->_format;
         }
 
         $handle = curl_init();
-        curl_setopt($handle, CURLOPT_URL, $url);
 
+        curl_setopt($handle, CURLOPT_URL, $url);
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
@@ -51,6 +54,7 @@ class pkanbanize {
         $code = (int) curl_getinfo($handle, CURLINFO_HTTP_CODE);
         
         curl_close($handle);
+
         return array(
             'err' => $err,
             'res' => $res,
@@ -63,6 +67,12 @@ namespace Lib;
 
 /**
  * pkanbanize
+ *
+ * 
+ * $k = new \Lib\pkanbanize( YOURKEY );
+ * $task = $k->getAllTasks(6);
+ * echo print_r($task['res']);
+ * 
  */
 class pkanbanize {
     protected $API;
@@ -72,23 +82,37 @@ class pkanbanize {
     protected $_pass;
     protected $_url = 'kanbanize.com/index.php/api/kanbanize';
     
-    public function __construct ($mail, $pass, $key, $domain=null) {
+    public function __construct ($key, $domain=null, $mail=null, $pass=null) {
 
+        $this->_key = $key;
         if ($domain) {
             $domain .= '.';
         }
-
-        $this->_mail = $mail;
-        $this->_pass = $pass;
-        $this->_key = $key;
+        if ($mail && $pass) {
+            $this->_mail = $mail;
+            $this->_pass = $pass;
+            $this->__login();
+        }
 
         $this->_url = 'http://'.$domain.$this->_url;
         $this->API = new \Api\pkanbanize($this->_url, $this->_key);
     }
-    public function __login () {
+    private function __login () {
         $this->API->data(array('email' => $this->_mail, 'pass' => $this->_pass));
         return $this->API->call('login');
     }
+    
+	/**
+	 * @name getAllTasks
+	 *
+	 * @param {int} boardid
+	 *
+	 * @return {Array} all tasks
+	 */
+	public function getAllTasks ($boardid) {
+		$this->API->data(array('boardid' => $boardid));
+		return $this->API->call('get_all_tasks');
+	}
     
 }
 
