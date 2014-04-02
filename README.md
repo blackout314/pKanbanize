@@ -1,13 +1,16 @@
-# pKanbanize
-A nice class to call [kanbanize](http://kanbanize.com ) API from PHP - [original code](https://github.com/eturino/KanbanizePHP) (dead project)
+# pKanbanize v 2.0
+A nice class to call [kanbanize](http://kanbanize.com ) API from PHP
 
 
 ##Basic usage:
 ```php
-$kanbanize = new pKanbanizeApi('email', 'password');
-$projects = $kanbanize->getProjectsAndBoards();
+$kanbanize = new \Lib\pkanbanize( YOURKEY, DOMAIN ); 
+// or
+$kanbanize = new \Lib\pkanbanize( null, DOMAIN, USER, PASS );
+
+$tasks = $kanbanize->getAllTasks( IDBOARD )
 echo '<pre>';
-print_r($projects);
+print_r($tasks);
 echo '</pre>';
 ```
 
