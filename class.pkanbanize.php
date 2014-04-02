@@ -22,6 +22,9 @@ class pkanbanize {
         $this->_key = $key;
         $this->_format = $format;
     }
+    public function setKey ($key) {
+        $this->_key = $key;
+    }
     public function data ($data) {
         $this->_data = $data;
     }
@@ -57,7 +60,7 @@ class pkanbanize {
 
         return array(
             'err' => $err,
-            'res' => $res,
+            'res' => $this->_format==='json' ? json_decode($res) : $res,
             'code'=> $code
         );
     }
@@ -69,7 +72,7 @@ namespace Lib;
  * pkanbanize
  *
  * 
- * $k = new \Lib\pkanbanize( YOURKEY );
+ * $k = new \Lib\pkanbanize( YOURKEY ); || $k = new \Lib\pkanbanize( null,null, USER,PASS );
  * $task = $k->getAllTasks(6);
  * echo print_r($task['res']);
  * 
@@ -82,20 +85,26 @@ class pkanbanize {
     protected $_pass;
     protected $_url = 'kanbanize.com/index.php/api/kanbanize';
     
-    public function __construct ($key, $domain=null, $mail=null, $pass=null) {
-
-        $this->_key = $key;
+    public function __construct ($key=null, $domain=null, $mail=null, $pass=null) {
+        
+        if ($key) {
+            $this->_key = $key;
+        }
+        
         if ($domain) {
             $domain .= '.';
-        }
-        if ($mail && $pass) {
-            $this->_mail = $mail;
-            $this->_pass = $pass;
-            $this->__login();
         }
 
         $this->_url = 'http://'.$domain.$this->_url;
         $this->API = new \Api\pkanbanize($this->_url, $this->_key);
+        
+        if ($mail && $pass) {
+            $this->_mail = $mail;
+            $this->_pass = $pass;
+            $res = $this->__login();
+            $this->_key = $res['res']->apikey;
+            $this->API->setKey( $this->_key );
+        }
     }
     private function __login () {
         $this->API->data(array('email' => $this->_mail, 'pass' => $this->_pass));
