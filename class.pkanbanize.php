@@ -101,8 +101,7 @@ class pkanbanize {
         if ($mail && $pass) {
             $this->_mail = $mail;
             $this->_pass = $pass;
-            $res = $this->__login();
-            $this->_key = $res['res']->apikey;
+            $this->_key = $this->__login()['res']->apikey;
             $this->API->setKey( $this->_key );
         }
     }
