@@ -13,7 +13,6 @@ class pkanbanize {
     private $_function;
     private $_data;
     private $_format;
-    
     protected $_url;
     protected $_key;
 
@@ -61,7 +60,7 @@ class pkanbanize {
         return array(
             'err' => $err,
             'res' => $this->_format==='json' ? json_decode($res) : $res,
-            'code'=> $code
+            'code'=> $code,
         );
     }
 }
@@ -88,12 +87,8 @@ class pkanbanize {
         if ($key) {
             $this->_key = $key;
         }
-        
-        if ($domain) {
-            $domain .= '.';
-        }
 
-        $this->_url = 'http://'.$domain.$this->_url;
+        $this->_url = 'http://' . ($domain ? $domain.'.' : '') . $this->_url;
         $this->API = new \Api\pkanbanize($this->_url, $this->_key);
         
         if ($mail && $pass) {
@@ -113,13 +108,17 @@ class pkanbanize {
 	 * @name getAllTasks
 	 *
 	 * @param {int} boardid
+	 * @param {Boolean} subtasks Set to true if you want to get subtask details for each task
 	 *
 	 * @return {Array} all tasks
 	 */
-	public function getAllTasks ($boardid) {
-		$this->API->data(array('boardid' => $boardid));
-		return $this->API->call('get_all_tasks');
-	}
+    public function getAllTasks ($boardid, $subtasks = false) {
+        $this->API->data(array(
+		    'boardid' => $boardid,
+		    'subtasks' => $subtasks ? 'yes' : false,
+        ));
+        return $this->API->call('get_all_tasks');
+    }
 
 	/**
 	 * @name getBoardActivities
@@ -228,7 +227,7 @@ class pkanbanize {
 	 * - extlink     A link in the following format: https:\\github.com\philsturgeon. If the parameter is embedded in the request BODY
 	 * - type        The name of the type you want to set.
 	 *
-	 * @return 1|string|null
+	 * @return 1|string|false
 	 */
 	public function editTask($boardid, $taskid, $changeData = array()) {
 		$d = array('boardid' => $boardid, 'taskid' => $taskid);
@@ -240,11 +239,12 @@ class pkanbanize {
 
 		$resp = $this->API->call('edit_task');
 		if ($resp) {
-			return $resp['code'] ? : null;
+			return $resp['code'] ? : false;
 		}
-		return null;
+		return false;
 	}
 
 }
 
+// -- eof
 ?>
