@@ -426,15 +426,23 @@ class pKanbanizeApi
 	 * @name getAllTasks
 	 *
 	 * @param {int} boardid
+	 * @param {Boolean} subtasks Set to true if you want to get subtask details for each task.
 	 *
 	 * @return {Array} all tasks
 	 */
-	public function getAllTasks($boardid)
+	public function getAllTasks($boardid, $subtasks = false)
 	{
 		$call = new pKanbanizeApiCall();
 
 		$call->setFunction('get_all_tasks');
-		$call->setData(array('boardid' => $boardid));
+
+		$data = array('boardid' => $boardid);
+		if ($subtasks) {
+			$data['subtasks'] = 'yes';
+		}
+
+		$call->setData($data);
+
 
 		return $this->doCall($call);
 	}
