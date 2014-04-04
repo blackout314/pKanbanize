@@ -73,7 +73,6 @@ namespace Lib;
  * $k = new \Lib\pkanbanize( YOURKEY ); || $k = new \Lib\pkanbanize( null,null, USER,PASS );
  * $task = $k->getAllTasks(6);
  * echo print_r($task['res']);
- * 
  */
 class pkanbanize {
     protected $API;
@@ -176,7 +175,6 @@ class pkanbanize {
      * @param int $boardid The ID of the board you want the new task created into. You can see the board ID on the dashboard screen, in the upper right corner of each board.
      *
      * @return array
-     *
      * - usernames Array containing the usernames of the board members.
      * - templates Array containing the templates available to this board.
      * - types     Array containing the types available to this board.
@@ -193,7 +191,6 @@ class pkanbanize {
      * @param int $boardid The ID of the board you want the new task created into. You can see the board ID on the dashboard screen, in the upper right corner of each board.
      *
      * @return array
-     *
      * - columns    Array containing the board columns (only the columns on last level are returned)
      * - columns[][position]       The position of the column
      * - columns[][lcname]         The name of the column.
@@ -206,6 +203,44 @@ class pkanbanize {
     public function getBoardStructure ($boardid) {
         $this->API->data(array('boardid' => $boardid));
         return $this->API->call('get_board_structure');
+    }
+
+    /**
+     * @name createNewTask
+     * @desc create_new_task method. Limit 30/hour
+     *
+     * @param int $boardid The ID of the board you want the new task created into. You can see the board ID on the dashboard screen, in the upper right corner of each board.
+     * @param array $data
+     *
+     * - title Title of the task
+     * - description Description of the task
+     * - priority One of the following: Low, Average, High
+     * - assignee Username of the assignee (must be a valid username)
+     * - color Any color code (e.g. 99b399) DO NOT PUT the # sign in front of the code!!!
+     * - size Size of the task
+     * - tags Space separated list of tags
+     * - deadline Dedline in the format: yyyy-mm-dd (e.g. 2011-12-13)
+     * - extlink A link in the following format: https:\\github.com\philsturgeon. If the parameter is embedded in the request BODY
+     * - type The name of the type you want to set.
+     * - template The name of the template you want to set. If you specify any property as part of the request, the one specified in the template will be overwritten.
+     *
+     * @return int|false
+     */
+    public function createNewTask($boardid, $data = array()) {
+        $d = array();
+        foreach ($data as $k => $v) {
+            $d[$k] = $v;
+        }
+        $d['boardid'] = $boardid;
+        
+        $this->API->data($d);
+        
+        $res = $this->API->call('create_new_task')['res'];
+        if ($res) {
+            return @$res['taskid'] ? : @$res['id'] ? : false;
+        }
+
+        return false;
     }
 
     /**
@@ -237,10 +272,128 @@ class pkanbanize {
         
         $this->API->data($d);
         
-        $resp = $this->API->call('edit_task');
-        if ($resp) {
-            return $resp['code'] ? : false;
+        $res = $this->API->call('edit_task')['res'];
+        if ($res) {
+            return $res['code'] ? true : false;
         }
+        return false;
+    }
+    /**
+     * @name deleteTask
+     *
+     * @param int $boardid The ID of the board you want the new task created into. You can see the board ID on the dashboard screen, in the upper right corner of each board.
+     * @param int $taskid The ID of the task to be deleted.
+     *
+     * @return 1|string|false
+     */
+    public function deleteTask($boardid, $taskid) {
+        $this->API->data( array(
+            'boardid' => $boardid, 
+            'taskid' => $taskid,
+        ) );
+        
+        $res = $this->API->call('delete_task')['res'];
+        if ($res) {
+            return @$res['status'] ? : false;
+        }
+        return false;
+    }
+
+    /**
+     * @name moveTask
+     * @desc move_task method. Limit 60/hour
+     *
+     * @param int $boardid The ID of the board where the task to be moved is located. You can see the board ID on the dashboard screen, in the upper right corner of each board.
+     * @param int $taskid The ID of the task to be deleted.
+     * @param string $column The name of the column to move the task into. If the name of the column is unique, you can specify it alone, but if there are more than one columns with that name, you must specify it as columnname1 . columnname2 . columnname3
+     *
+     * @param array $options
+     *
+     * - lane The name of the swim-lane to move the task into. If omitted, the swimlane doesn't change
+     * - position The position of the task in the new column (zero-based). If omitted, the task will be placed at the bottom of the column
+     * - exceedingreason If you can exceed a limit with a reason, supply it with this parameter
+     *
+     * @return 1|string|false
+     */
+    public function moveTask($boardid, $taskid, $column, $options = array()) {
+        $d = array('boardid' => $boardid, 'taskid' => $taskid, 'column' => $column,);
+        foreach ($options as $k => $v) {
+            $d[$k] = $v;
+        }
+        
+        $this->API->data($d);
+        
+        $res = $this->API->call('move_task')['res'];
+        if ($res) {
+            return @$res['status'] ? : false;
+        }
+        
+        return false;
+    }
+    /**
+     * @name blockTask
+     *
+     * @param int $boardid The ID of the board where the task to be moved is located. You can see the board ID on the dashboard screen, in the upper right corner of each board.
+     * @param int $taskid The ID of the task to be deleted.
+     * @param string $event Possible valules:
+     * - 'block' - block a task
+     * - 'editblock' - edit the blocked reason
+     * - 'unblock' - unblock a task
+     *
+     * @param string $blockreason Required if event is set to 'block' or 'editblock
+     *
+     * @return 1|string|false
+     */
+    public function blockTask($boardid, $taskid, $event, $blockreason = null) {
+        $d = array('boardid' => $boardid, 'taskid' => $taskid, 'event' => $event);
+        if ($blockreason) {
+            $d['blockreason'] = $blockreason;
+        }
+        
+        $this->API->data($d);
+        
+        $res = $this->API->call('block_task')['res'];
+        if ($res) {
+            return @$res['status'] ? : false;
+        }
+        
+        return false;
+    }
+
+    /**
+     * @name addComment
+     *
+     * @param int $taskid The ID of the task to be deleted.
+     * @param string $comment
+     *
+     * @return array
+     */
+    public function addComment($taskid, $comment) {
+        $this->API->data(array(
+            'taskid' => $taskid, 
+            'comment' => $comment,
+        ));
+        return $this->API->call('add_comment');
+    }
+
+    /**
+     * @getProjectsAndBoards
+     * @desc get_projects_and_boards method, limit 30/hour
+     *
+     * @return array|false
+     *
+     * return array of projects, each with
+     * - [][name] The name of the project
+     * - [][id] The ID of the project
+     * - [][boards] Array of details for any boards in current project ( name, id )
+     */
+    public function getProjectsAndBoards () {
+        $this->API->data(array());
+        $res = $this->API->call('get_projects_and_boards');
+        if ($res) {
+            return @$res['projects'] ? : false;
+        }
+        
         return false;
     }
 

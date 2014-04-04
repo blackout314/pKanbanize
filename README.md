@@ -2,7 +2,7 @@
 A nice class to call [kanbanize](http://kanbanize.com ) API from PHP
 
 
-##Basic usage:
+## Basic usage:
 ```php
 $kanbanize = new \Lib\pkanbanize( YOURKEY, DOMAIN ); 
 // or
@@ -14,14 +14,13 @@ print_r($tasks);
 echo '</pre>';
 ```
 
-##Available functions
+## Available functions
 
 You can refer to the official [kanbanize API doc](http://kanbanize.com/ctrl_integration)
 
 Implemented function
 
 + getProjectsAndBoards
-+ getBoardStructure
 + getBoardStructure
 + getBoardSettings
 + getBoardActivities
@@ -35,17 +34,16 @@ Implemented function
 + blockTask
 
 
-##Pro users - kanbanize via subdomain
+## Pro users - kanbanize via subdomain
 
 If you access kanbanize on your own subdomain, you can specify the subdomain name in the constructor.
 
 https://yourcompany.kanbanize.com/
 
 ```php
-$kanbanize = new pKanbanizeApi('email', 'password', 'yourcompany');
-
+$kanbanize = new \Lib\pkanbanize( YOURKEY, DOMAIN ); 
 ```
-##TEAM
+## TEAM
 
 [ ![Carlo Denaro avatar](http://www.carlodenaro.com/me.jpg) Carlo Denaro ](https://github.com/blackout314)
 [ ![Carlo 'kajyr' avatar](https://avatars1.githubusercontent.com/u/51404?s=200) Carlo 'kajyr' ](https://github.com/kajyr)
