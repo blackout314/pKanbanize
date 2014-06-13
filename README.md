@@ -32,6 +32,7 @@ Implemented function
 + moveTask
 + editTask
 + blockTask
++ getLinks
 
 
 ## Pro users - kanbanize via subdomain
