@@ -82,13 +82,20 @@ class pkanbanize {
 	protected $_pass;
 	protected $_url = 'kanbanize.com/index.php/api/kanbanize';
 
-	public function __construct ($key=null, $domain=null, $mail=null, $pass=null) {
+	/**
+	 * @param {String} [key] api key
+	 * @param {String} [domain] domain
+	 * @param {String} [mail] mail
+	 * @param {String} [pass] password
+	 * @param {String} [format] json/xml
+	 */
+	public function __construct ($key=null, $domain=null, $mail=null, $pass=null, $format=null) {
 		if ($key) {
 			$this->_key = $key;
 		}
 
 		$this->_url = 'http://' . ($domain ? $domain.'.' : '') . $this->_url;
-		$this->API = new \Api\pkanbanize($this->_url, $this->_key);
+		$this->API = new \Api\pkanbanize($this->_url, $this->_key, $format);
 
 		if ($mail && $pass) {
 			$this->_mail = $mail;

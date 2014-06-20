@@ -4,9 +4,9 @@ A nice class to call [kanbanize](http://kanbanize.com ) API from PHP
 
 ## Basic usage:
 ```php
-$kanbanize = new \Lib\pkanbanize( YOURKEY, DOMAIN ); 
+$kanbanize = new \Lib\pkanbanize( YOURKEY, DOMAIN, null, null, FORMAT );
 // or
-$kanbanize = new \Lib\pkanbanize( null, DOMAIN, USER, PASS );
+$kanbanize = new \Lib\pkanbanize( null, DOMAIN, USER, PASS, FORMAT );
 
 $tasks = $kanbanize->getAllTasks( IDBOARD )
 echo '<pre>';
@@ -42,7 +42,7 @@ If you access kanbanize on your own subdomain, you can specify the subdomain nam
 https://yourcompany.kanbanize.com/
 
 ```php
-$kanbanize = new \Lib\pkanbanize( YOURKEY, DOMAIN ); 
+$kanbanize = new \Lib\pkanbanize( YOURKEY, 'yourcompany' );
 ```
 ## TEAM
 
