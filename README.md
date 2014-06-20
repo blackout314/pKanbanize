@@ -1,4 +1,4 @@
-# pKanbanize v 2.0
+# pKanbanize v 2.1
 A nice class to call [kanbanize](http://kanbanize.com ) API from PHP
 
 
