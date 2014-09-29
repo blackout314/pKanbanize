@@ -119,10 +119,11 @@ class pkanbanize {
      *
      * @return {Array} all tasks
      */
-    public function getAllTasks ($boardid, $subtasks = false) {
+    public function getAllTasks ($boardid, $subtasks = false, $archive = false) {
     	$this->API->data(array(
     		'boardid' => $boardid,
     		'subtasks' => $subtasks ? 'yes' : false,
+           	'container' => $archive ? 'archive' : null
     		));
     	return $this->API->call('get_all_tasks');
     }
