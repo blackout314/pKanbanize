@@ -89,7 +89,7 @@ class pkanbanize {
 	 * @param {String} [pass] password
 	 * @param {String} [format] json/xml
 	 */
-	public function __construct ($key=null, $domain=null, $mail=null, $pass=null, $format=null) {
+	public function __construct ($key=null, $domain=null, $mail=null, $pass=null, $format='json') {
 		if ($key) {
 			$this->_key = $key;
 		}
